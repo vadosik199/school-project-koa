@@ -1,10 +1,12 @@
 const Koa = require('koa');
 const app = new Koa();
 const mongoose = require('koa-mongoose')
+const jwt = require('jsonwebtoken');
 const convert = require('koa-convert');
 const send = require('koa-send');
 const Pug = require('koa-pug');
 const fs = require('fs');
+const cookie = require('koa-cookie');
 const config= require('./config');
 const bodyParser = require('koa-bodyparser');
 const morgan = require('koa-morgan');
@@ -22,7 +24,7 @@ app.use(async (ctx, next) => {
         await next(); 
     }
     catch(err) {
-        ctx.body = err.message;
+        console.log(err);
     }
 });
 
@@ -55,6 +57,24 @@ app.use(convert(mongoose({
         native_parser: true
     }
 })));
+
+app.use(async (ctx, next) => {
+    let token = ctx.cookies.get('token');
+    if(!token) {
+        ctx.request.user = undefined;
+    }
+    else {
+        jwt.verify(token, config.authorisation.secret, (err, decoded) => {
+            if(err) {
+                ctx.request.user = undefined;
+            }
+            else {
+                ctx.request.user = decoded;
+            }
+        });
+    }
+    await next();
+});
 
 app.use(_home.routes());
 app.use(_user.routes());

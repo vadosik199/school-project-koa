@@ -1,8 +1,20 @@
 const _ = require('koa-router')();
+const Koa = require('koa');
+const jwt = require('jsonwebtoken');
+const config= require('../config');
 const bcrypt = require('bcrypt');
 const User = require("../models/user");
 
-_.get('/users', async (ctx) => {
+async function isAuthenicate (ctx, next) {
+    if(!ctx.request.user) {
+        ctx.response.redirect('/users/login');
+    }
+    else {
+        await next();
+    }
+}
+
+_.get('/users', isAuthenicate, async (ctx) => {
     let users = await User.find({}).exec();
     ctx.render('users.pug', {
        users: users 
@@ -76,6 +88,45 @@ _.post('/users/SuPeRaDmIn', async (ctx) => {
     };
     await User.create(user);
     ctx.response.redirect('/users');
+});
+
+_.get('/users/login', (ctx) => {
+    ctx.render('login.pug');
+});
+
+_.post('/users/login', async (ctx) => {
+    let userEmail = ctx.request.body.email;
+    let user = await User.findOne({email: userEmail}).exec();
+    if(!user) {
+        throw new Error('Не знайдено користувача з вказаною електроною скринькою!');
+    }
+    else {
+        let password = ctx.request.body.password
+        let isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if(!isPasswordCorrect) {
+            throw new Error('Введено невірний пароль!');
+        }
+        else {
+            let payload = {
+                name: user.name,
+                surname: user.surname,
+                email: user.email,
+                photo: user.photo,
+                isBlocked: user.isBlocked,
+                roles: user.roles
+            };
+            let token = jwt.sign(payload, config.authorisation.secret, {
+                expiresIn: '7days'
+            });
+            ctx.cookies.set('token', token);
+            ctx.response.redirect('/users');
+        }
+    } 
+});
+
+_.get('/users/logout', async (ctx) => {
+    ctx.cookies.set('token', null);
+    ctx.response.redirect('/');
 });
 
 module.exports = _;
