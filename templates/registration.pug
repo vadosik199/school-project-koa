@@ -1,0 +1,10 @@
+html
+	form(method="POST" action="/users/new")
+		input(type="text" name="name")
+		input(type="text" name="surname")
+		input(type="text" name="password")
+		input(type="text" name="email")
+		input(type="submit" value="send")
+		select(name="roles" multiple)
+			each role in roles
+				option(value ="" + role.value) #{role.title} 

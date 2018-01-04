@@ -1,0 +1,42 @@
+extends layout
+block content
+	div.container
+		div.row
+			main.posts-listing.col-lg-8
+				div.container
+					div.row
+						each post in posts
+							div.post.col-xl-6
+								div.post-thumbnail
+									a(href="/posts/id/" + post._id)
+										img(src="/img/news/" + post.images[0]).img-fluid
+								div.post-details
+									div.post-meta.d-flex.justify-content-between
+										div.date.meta-last
+										div.category
+											a(href="/posts?category=" + post.category._id) #{post.category.title}
+									a(title= post.title href="/posts/id/" + post._id)
+										h3.h4 #{post.title}
+									footer.post-footer.d-flex.align-items-center
+										a(href="#").author.d-flex.align-items-center.flex-wrap
+											div.avatar
+												if !post.author.photo
+													img(src="/img/user.svg").img-fluid
+												else
+													img(src="/img/users/" + post.author.photo).img-fluid
+											div.title
+												span #{post.author.surname} #{post.author.name}
+										div.date
+											i.icon-clock
+											span(datetime= post.created).posted-date
+										div.comments.meta-last
+											i.icon-comment
+											.
+												#{post.comments.length}
+			aside.col-lg-4
+				include login-aside.pug
+				include search-aside.pug
+				include latest-posts-aside.pug
+				include categories-aside.pug
+	script(src="/js/timeago.js")
+	script timeago().render($('.posted-date'));

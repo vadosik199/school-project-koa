@@ -1,0 +1,14 @@
+html
+	head
+		script(src="/ckeditor/ckeditor.js")
+	form(method="POST" action="/posts/create" enctype="multipart/form-data")
+		input(type="text" name="title")
+		br
+		textarea(name="text")#news-text
+		br
+		select(name="category")
+			each category in categories
+				option(value= category._id) #{category.title}
+		input(type="file" name="image" multiple)
+	script
+		include ../public/js/ckeditor-custom.js

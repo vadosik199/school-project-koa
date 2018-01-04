@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	include main-image.pug
+	if user
+		h3= user.email
+	each val, index in users
+		h1= val.name
+		h1= val.surname
+		h1= val.email
+		h1= val.password
+		each role in val.roles
+			h5= role
+		hr
+	include map.pug

@@ -1,0 +1,22 @@
+div.widget.search
+	if !user
+		header
+			h3.h6 Вікно входу
+		form(method="POST" action="/users/login").login
+			div.form-group
+				input(type="email" name="email" placeholder="Електронна скринька")
+			div.form-group
+				input(type="password" name="password" placeholder="Пароль")
+			div.form-group
+				button(type="submit").btn.btn-primary
+					i.fa.fa-sign-in
+	else
+		div.user-img
+		p.user-details
+			if !user.photo
+				img(src="/img/user.svg").ava
+			else
+				img(src="/img/users/" + user.photo).ava
+		h6.user-title #{user.email}
+		a(href="/users/logout").btn.btn-primary.signout 
+			i.fa.fa-sign-out

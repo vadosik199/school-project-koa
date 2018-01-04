@@ -1,0 +1,91 @@
+extends layout
+block content
+	div.container
+		div.row
+			main.post.blog-post.col-lg-8
+				div.container
+					div.post-single
+						div.post-thumbnail
+							img(src="/img/news/" + post.images[0]).img-fluid.post-detail-img
+						div.post-details
+							div.post-meta.d-flex.justify-content-between
+								div.category
+									a(href="/posts?category="+ post.category._id) #{post.category.title}
+							h1= post.title
+							div.post-footer.d-flex.align-items-center.flex-column.flex-sm-row
+								a(href="#").author.d-flex.align-items-center.flex-wrap
+									div.avatar
+										if !post.author.photo
+											img(src="/img/user.svg").img-fluid
+										else
+											img(src="/img/users/" + post.author.photo).img-fluid
+									div.title
+										span #{post.author.surname} #{post.author.name}
+									div.date
+										i.icon-clock
+										span(datetime= post.created).posted-date
+									div.comments.meta-last
+										i.icon-comment
+										.
+											12
+							div.post-body!= post.text
+							div.posts-nav.d-flex.justify-content-between.align-items-stretch.flex-column.flex-md-row
+								if previous != null
+									a(href="/posts/id/" + previous._id).prev-post.text-left.d-flex.align-items-center
+										div.icon.prev
+											i.fa.fa-angle-left
+										div.text
+											strong.text-primary Наступний запис
+											h6= previous.title
+								if next != null
+									a(href="/posts/id/" + next._id).next-post.text-right.d-flex.align-items-center.justify-content-end
+										div.text
+											strong.text-primary Попередній запис
+											h6= next.title
+										div.icon.next
+											i.fa.fa-angle-right
+							div.post-comments
+								h3.h6 Коментарі
+									span.no-of-comments #{post.comments.length}
+								each comment in post.comments
+									div.comment
+										div.comment-header.d-flex.justify-content-between
+											div.user.d-flex.align-items-center
+												div.image
+													if !comment.author
+														img(src="/img/user.svg").img-fluid.rounded-circle
+													else if !comment.author.photo
+														img(src="/img/user.svg").img-fluid.rounded-circle
+													else
+														img(src="/img/users/" + comment.author.photo).img-fluid.rounded-circle
+												div.title
+													strong
+														if !comment.author
+															| #{comment.authorName}
+														else
+															| #{comment.author.surname} #{comment.author.name}
+													span(datetime= comment.date).posted-date.date
+										div.comment-body
+											p= comment.text
+							div.add-comment
+								header
+									h3.h6 Додати коментар
+								form(action="/comments/add" method="POST").commenting-form
+									div.row
+										if !user
+											div.form-group.col-md-6
+												input(type="text" name="username" id="username" placeholder="Ім'я").form-control
+											div.form-group.col-md-6
+												input(type="email" name="email" id="useremail" placeholder="Електронна скринька (не буде опубліковано)").form-control
+										div.form-group.col-md-12
+											textarea(name="usercomment" id="usercomment" placeholder="Введіть текст коментарю").form-control
+											input(type="hidden" name="postId" value="" + post._id)
+										div.form-group.col-md-12
+											button(type="submit").btn.btn-secondary Відправити коментар
+			aside.col-lg-4
+				include login-aside.pug
+				include search-aside.pug
+				include latest-posts-aside.pug
+				include categories-aside.pug
+	script(src="/js/timeago.js")
+	script timeago().render($('.posted-date'));

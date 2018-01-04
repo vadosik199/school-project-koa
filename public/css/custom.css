@@ -1,0 +1,163 @@
+/* your styles go here */
+
+#map {
+	height: 400px;
+	width: 100%;
+	box-shadow: 0px 0px 30px gray;
+}
+
+.divider {
+	padding:0 !important;
+}
+
+.hero section {
+	margin:0px;
+	background: rgba(0, 0, 0, 0.4);
+}
+
+.post-img {
+	width:100%;
+	object-position: center;
+	object-fit: cover;
+}
+
+.avatar img {
+	height:100%;
+	width: 100%;
+	object-position: center;
+	object-fit: cover;
+}
+
+.text .text-inner {
+	max-height: 45% !important;
+}
+
+.content > div p {
+	max-height: 20%;
+	text-overflow: clip;
+}
+
+.post-thumbnail img {
+	width: 100%;
+	height: 25%;
+	object-position: center;
+	object-fit: cover;
+}
+
+.text-muted {
+	height: 110px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.post-details .h4 {
+	max-width:350px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.widget.latest-posts img{
+	height: 100%;
+	object-position: center;
+	object-fit: cover;
+}
+.post-detail-img {
+	width: 100%;
+	height: 50% !important;
+	object-position: center;
+	object-fit: cover;
+}
+
+.prev-post .text h6 {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 200px;
+}
+
+.featured-posts .content > div {
+	max-height: 90px;
+	max-width:550px !important;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.main-logo {
+	width: 70px;
+	height:70px;
+	object-fit: cover;
+	object-position: center;
+	border-radius: 50%;
+}
+
+body > header .navbar {
+	padding: 0px 15px !important;
+}
+
+.post-body img{
+	width:100% !important;
+	height: auto!important;
+	object-fit: cover;
+	object-position: center;
+}
+
+.latest-posts .title strong {
+	max-width: 200px;
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.login .btn {
+	margin:0px !important;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	width: 100%;
+}
+
+.widget.search {
+	position: relative;
+}
+
+.widget .user-img {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width:100%;
+	height:80px;
+	background-color: rgba(218,220,221, 0.5);
+	z-index: -1;
+}
+
+.widget .user-details {
+	text-align: center;
+}
+
+.widget p .ava {
+	z-index: 99;
+	width:80px;
+	height:80px;
+	object-fit: cover;
+	object-position: center;
+	border-radius: 50%;
+	border: 5px solid white;
+	background-color: white;
+}
+
+.widget .user-title {
+	text-align: center;
+}
+
+.widget .signout {
+	height: 40px;
+	line-height: 40px;
+	width: 100%;
+	text-align: center;
+}
+.img-fluid {
+	object-fit: cover !important;
+	object-position: center !important;
+}

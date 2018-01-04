@@ -1,0 +1,16 @@
+div.widget.latest-posts
+	header
+		h3.h6 Останні новини
+	div.blog-posts
+		each post in latestPosts
+			a(title= post.title href="/posts/id/" + post._id)
+				div.item.d-flex.align-items-center
+					div.image
+						img(src="/img/news/" + post.images[0]).img-fluid
+					div.title
+						strong= post.title
+						div.d-flex.align-items-center
+							div.comments
+								i.icon-comment
+								.
+									#{post.comments.length}

@@ -1,0 +1,41 @@
+extends layout
+block content
+	include main-image.pug
+	section.featured-posts
+		div.container
+			each val, index in news
+				div.row.d-flex.align-items-stretch
+					if index%2 != 0
+						div.image.col-lg-5
+							img(src="/img/news/" + val.images[0]).post-img
+					div.text.col-lg-7
+						div.text-inner.d-flex.align-items-center
+							div.content
+								header.post-header
+									div.category
+										a(href="/posts?category=" + val.category._id) #{val.category.title}
+									a(href="/posts/id/" + val._id)
+										h5 #{val.title}
+								div!= val.text
+								footer.post-footer.d-flex.align-items-center
+									a(href="#").author.d-flex.align-items-center.flex-wrap
+										div.avatar
+											if !val.author.photo
+												img(src="/img/user.svg").img-fluid
+											else
+												img(src="/img/users/" + val.author.photo).img-fluid
+										div.title
+											span #{val.author.surname}  #{val.author.name}
+										div.date
+											i.icon-clock
+											span(datetime= val.created).posted-date
+										div.comments.meta-last
+											i.icon-comment
+											.
+												#{val.comments.length}
+					if index%2 == 0
+						div.image.col-lg-5
+							img(src="/img/news/" + val.images[0]).post-img
+	script(src="/js/timeago.js")
+	script timeago().render($('.posted-date'));
+	include map.pug

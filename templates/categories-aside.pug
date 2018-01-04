@@ -1,0 +1,6 @@
+div.widget.categories
+	header
+		h3.h6 Категорії
+	each category in categories
+		div.item.d-flex.justify-content-between
+			a(href="/posts?category=" + category._id)= category.title
