@@ -41,7 +41,11 @@ const UserSchema = new Schema({
 		trim: true,
 		required: false
 	},
-	isBlocked: {
+	isBlock: {
+		type: Boolean,
+		default: false
+	},
+	isVerify: {
 		type: Boolean,
 		default: false
 	},
@@ -49,6 +53,24 @@ const UserSchema = new Schema({
 		type: String,
 		enum: ['SuperAdmin', 'Admin', 'Teacher', 'Student']
 	}]
+});
+
+const TokenSchema = new Schema({
+    _userId: { 
+		type: mongoose.Schema.Types.ObjectId, 
+		required: true, 
+		ref: 'User' 
+	},
+    token: { 
+		type: String, 
+		required: true 
+	},
+    createdAt: { 
+		type: Date, 
+		required: true,
+		default: Date.now, 
+		expires: 43200 
+	}
 });
 
 UserSchema.statics.authenticate = function (email, password, callback) {
@@ -84,5 +106,7 @@ UserSchema.methods.isInRole = (roles) => {
 }
 
 var user = mongoose.model("User", UserSchema);
+var token = mongoose.model('Token', TokenSchema)
 
-module.exports = user;
+module.exports.User = user;
+module.exports.Token = token;

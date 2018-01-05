@@ -1,9 +1,10 @@
 const _ = require('koa-router')();
 const Koa = require('koa');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const config= require('../config');
 const bcrypt = require('bcrypt');
-const User = require("../models/user");
+const {User, Token} = require("../models/user");
 
 async function isAuthenicate (ctx, next) {
     if(!ctx.request.user) {
@@ -12,6 +13,12 @@ async function isAuthenicate (ctx, next) {
     else {
         await next();
     }
+}
+
+async function randomToken(val, key) {
+    let token = await bcrypt.hash(val, key);
+    token = token.replace(new RegExp('\\.|\\/', 'g'), '');
+    return token;
 }
 
 _.get('/users', isAuthenicate, async (ctx) => {
@@ -60,7 +67,27 @@ _.post('/users/new', async (ctx) => {
     };
     let hashedPassword = await bcrypt.hash(user.password, 10);
     user.password = hashedPassword;
-    await User.create(user);
+    let createdUser = await User.create(user);
+    let verifyToken = await randomToken(user.email, 10);
+    let token = {
+        _userId: createdUser._id,
+        token: verifyToken
+    };
+    let createdToken = await Token.create(token);
+    var transporter = nodemailer.createTransport({ 
+        service: 'gmail', 
+        auth: { 
+            user: config.nodemailer.user, 
+            pass: config.nodemailer.pass 
+        } 
+    });
+    var mailOptions = { 
+        from: 'vadosik.chumack@gmail.com', 
+        to: user.email, 
+        subject: 'Account Verification Token', 
+        text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + ctx.request.headers.host + '\/users\/confirmation\/id\/' + createdToken.token + '.\n' 
+    };
+    await transporter.sendMail(mailOptions);
     ctx.response.redirect('/users');
 });
 
@@ -86,6 +113,8 @@ _.post('/users/SuPeRaDmIn', async (ctx) => {
         password: ctx.request.body.password,
         roles: ['SuperAdmin']
     };
+    let hashedPassword = await bcrypt.hash(user.password, 10);
+    user.password = hashedPassword;
     await User.create(user);
     ctx.response.redirect('/users');
 });
@@ -107,21 +136,51 @@ _.post('/users/login', async (ctx) => {
             throw new Error('Введено невірний пароль!');
         }
         else {
-            let payload = {
-                name: user.name,
-                surname: user.surname,
-                email: user.email,
-                photo: user.photo,
-                isBlocked: user.isBlocked,
-                roles: user.roles
-            };
-            let token = jwt.sign(payload, config.authorisation.secret, {
-                expiresIn: '7days'
-            });
-            ctx.cookies.set('token', token);
-            ctx.response.redirect('/users');
+            if(!user.isVerify) {
+                throw new Error('Електронну скриньку не підтвердженно!');
+            }
+            else {
+                if(user.isBlock) {
+                    throw new Error('Обліковий запис заблоковано! Зверніться до адміністрації сайту!');
+                }
+                else {
+                    let payload = {
+                        name: user.name,
+                        surname: user.surname,
+                        email: user.email,
+                        photo: user.photo,
+                        isBlocked: user.isBlocked,
+                        roles: user.roles
+                    };
+                    let token = jwt.sign(payload, config.authorisation.secret, {
+                        expiresIn: '7days'
+                    });
+                    ctx.cookies.set('token', token);
+                    ctx.response.redirect('/users');
+                }
+            }
         }
     } 
+});
+
+_.get('/users/confirmation/id/:id', async (ctx) => {
+    let token = await Token.findOne({token: ctx.params.id}).exec();
+    if(!token) {
+        throw new Error('Not found');
+    }
+    else {
+        let user = await User.findOne({_id: token._userId}).exec();
+        if(!user) {
+            throw new Error('Not found');
+        }
+        else {
+            let option = {
+                isVerify: true
+            };
+            let a = await User.findByIdAndUpdate(user._id, option);
+            ctx.response.redirect('/users/login');
+        }
+    }
 });
 
 _.get('/users/logout', async (ctx) => {

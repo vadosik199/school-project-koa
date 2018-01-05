@@ -8,5 +8,9 @@ module.exports = {
         host: 'ds046047.mlab.com',
         port: 46047,
         database: 'school'
+    },
+    nodemailer: {
+        user: 'vadosik.chumack@gmail.com',
+        pass: 'vadim1976111SZ'
     }
 }

@@ -29,6 +29,7 @@
     "koa-router": "^7.3.0",
     "koa-send": "^4.1.2",
     "koa-static": "^4.0.2",
-    "mongoose": "^5.0.0-rc1"
+    "mongoose": "^5.0.0-rc1",
+    "nodemailer": "^4.4.1"
   }
 }

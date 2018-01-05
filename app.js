@@ -24,6 +24,7 @@ app.use(async (ctx, next) => {
         await next(); 
     }
     catch(err) {
+        ctx.body = err.message
         console.log(err);
     }
 });
@@ -39,7 +40,7 @@ app.use(async (ctx, next) => {
         await send(ctx, ctx.path, { root: __dirname + '/public' });
     }
     else {
-        await next()
+        await next();
     }
 });
 
