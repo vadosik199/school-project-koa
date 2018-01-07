@@ -1,0 +1,66 @@
+html
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        title= title
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        meta(name="robots" content="all,follow")
+        link(rel="stylesheet" href="/admin/vendor/bootstrap/css/bootstrap.min.css")
+        link(rel="stylesheet" href="/admin/vendor/font-awesome/css/font-awesome.min.css")
+        link(rel="stylesheet" href="/admin/css/fontastic.css")
+        link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700")
+        link(rel="stylesheet" href="/admin/css/style.blue.css" id="theme-stylesheet")
+        link(rel="stylesheet" href="/admin/css/custom.css")
+        script(src="https://code.jquery.com/jquery-3.2.1.min.js")
+    body
+        div.page
+            header.header
+                nav.navbar
+                    div.container-fluid
+                        div.navbar-holder.d-flex.align-items-center.justify-content-between
+                            div.navbar-header
+                                a(href='/adminpanel').navbar-brand
+                                    div.brand-text.brand-big
+                                        span School
+                                        strong Dashboard
+                                    div.brand-text.brand-small
+                                        strong SD
+                                    a(href="#")#toggle-btn.menu-btn.active
+                                        span
+                                        span
+                                        span
+                            ul.nav-menu.list-unstyled.d-flex.flex-md-row.align-items-md-center
+                                li.nav-item
+                                    a(href="/").nav-link На головну
+                                li.nav-item
+                                    a(href="/users/logout").nav-link.logout Вихід
+                                        i.fa.fa-sign-out
+            div.page-content.d-flex.align-items-stretch
+                nav.side-navbar
+                    div.sidebar-header.d-flex.align-items-center
+                        div.avatar
+                            if !user.photo
+                                img(src="/img/user.svg").img-fluid.rounded-circle
+                            else
+                                img(src="/img/users/" + user.photo).img-fluid.rounded-circle
+                        div.title
+                            h1.h4 #{user.surname} #{user.name}
+                    ul.list-unstyled
+                        li
+                            a(href="/users")
+                                i.icon-padnote
+                                .
+                                    Користувачі
+                div.content-inner
+                    header.page-header
+                        div.container-fluid
+                            h2.no-margin-bottom Dashboard
+                    section.dashboard-counts.no-padding-bottom
+                        block content
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js")
+        script(src="/bootstrap/js/bootstrap.min.js")
+        script(src="/jquery.cookie/jquery.cookie.js")
+        script(src="/fancybox/jquery.fancybox.min.js")
+        script(src="/js/front.js")
+        script(src="/js/map.js")
+        script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpnRZvPH5z-eSnSJah9xMW0c53MDQdoj0&callback=initMap" async defer)

@@ -44,8 +44,6 @@ app.use(async (ctx, next) => {
     }
 });
 
-pug.use(app);
-
 app.use(convert(mongoose({
     user: config.database.user,
     pass: config.database.pass,
@@ -63,19 +61,24 @@ app.use(async (ctx, next) => {
     let token = ctx.cookies.get('token');
     if(!token) {
         ctx.request.user = undefined;
+        pug.locals.user = undefined;
     }
     else {
         jwt.verify(token, config.authorisation.secret, (err, decoded) => {
             if(err) {
                 ctx.request.user = undefined;
+                pug.locals.user = undefined;
             }
             else {
                 ctx.request.user = decoded;
+                pug.locals.user = decoded;
             }
         });
     }
     await next();
 });
+
+pug.use(app);
 
 app.use(_home.routes());
 app.use(_user.routes());

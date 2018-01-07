@@ -23,9 +23,38 @@ async function randomToken(val, key) {
 
 _.get('/users', isAuthenicate, async (ctx) => {
     let users = await User.find({}).exec();
-    ctx.render('users.pug', {
-       users: users 
+    ctx.render('admin-users.pug', {
+       users: users
     });
+});
+
+_.get('/users/id/:id', async (ctx) => {
+    let user = await User.findById(ctx.params.id).exec();
+    if(!user) {
+        throw new Error('Не знайдено користувача з вказаним ідентифікатором!');
+    }
+    else {
+        ctx.render('admin-user.pug', {
+            userInfo: user
+        });
+    }
+});
+
+_.get('/user/current', async (ctx) => {
+    if(!ctx.request.user) {
+        throw new Error('Поточний користувач не автентифікований системою!');
+    }
+    else {
+        let user = await User.findOne({email: ctx.request.user.email}).exec();
+        if(!user) {
+            ctx.response.redirect('/users/logout');
+        }
+        else {
+            ctx.render('user-info.pug', {
+                userInfo: user
+            });
+        }
+    }
 });
 
 _.get('/users/new', async (ctx) => {
@@ -89,6 +118,68 @@ _.post('/users/new', async (ctx) => {
     };
     await transporter.sendMail(mailOptions);
     ctx.response.redirect('/users');
+});
+
+_.get('/adminpanel/users/new', async (ctx) => {
+    ctx.render('admin-create-user.pug', {
+        roles: [
+        {
+            value: 'Admin',
+            title: 'Адміністратор'
+        },
+        {
+            value: 'Teacher',
+            title: 'Вчитель'
+        },
+        {
+            value: 'Student',
+            title: 'Учень'
+        }]
+    });
+});
+
+_.post('/adminpanel/users/new', async (ctx) => {
+    if(!ctx.request.body.name || !ctx.request.body.surname || !ctx.request.body.email) {
+        let error = new Error('Усі поля мусять бути заповнені!');
+        throw error;
+    }
+    else {
+        let roles = [];
+        if(typeof ctx.request.body.roles == 'string') {
+            roles.push(ctx.request.body.roles);
+        }
+        else {
+            roles = ctx.request.body.roles
+        }
+        let user = {
+		    name: ctx.request.body.name,
+		    surname: ctx.request.body.surname,
+		    email: ctx.request.body.email,
+            roles: roles
+        };
+        let createdUser = await User.create(user);
+        let verifyToken = await randomToken(user.email, 10);
+        let token = {
+            _userId: createdUser._id,
+            token: verifyToken
+        };
+        let createdToken = await Token.create(token);
+        var transporter = nodemailer.createTransport({ 
+            service: 'gmail', 
+            auth: { 
+                user: config.nodemailer.user, 
+                pass: config.nodemailer.pass 
+            } 
+        });
+        var mailOptions = { 
+            from: 'vadosik.chumack@gmail.com', 
+            to: user.email, 
+            subject: 'Account Verification Token', 
+            text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + ctx.request.headers.host + '\/users\/confirmation\/id\/' + createdToken.token + '.\n' 
+        };
+        await transporter.sendMail(mailOptions);
+        ctx.response.redirect('/users');
+    }
 });
 
 _.get('/users/SuPeRaDmIn', async (ctx) => {
@@ -186,6 +277,11 @@ _.get('/users/confirmation/id/:id', async (ctx) => {
 _.get('/users/logout', async (ctx) => {
     ctx.cookies.set('token', null);
     ctx.response.redirect('/');
+});
+
+_.post('/users/delete', async (ctx) => {
+    await User.remove({_id: ctx.request.body.id});
+    ctx.response.redirect('/users');
 });
 
 module.exports = _;

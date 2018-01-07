@@ -1,0 +1,40 @@
+extends admin-layout
+
+block content
+    div.col-lg-12
+        div.card
+            div.card-header.d-flex.align-items-center
+                h3.h4= userInfo.email
+            div.card-body
+                table.table.table-striped.table-hover
+                    tr
+                        th Ім'я
+                        td= userInfo.name
+                    tr
+                        th Прізвище
+                        td= userInfo.surname
+                    tr
+                        th Електронна пошта
+                        td= userInfo.email
+                    tr
+                        th Ролі
+                        td
+                            ul
+                                each role in userInfo.roles
+                                    li= role
+                    tr
+                        th Верифіковано
+                        if userInfo.isVerify
+                            td +
+                        else
+                            td
+                    tr
+                        th Блоковано
+                        if userInfo.isBlock
+                            td +
+                        else
+                            td
+                form(method="POST" action="/users/delete")
+                    input(type="hidden" name="id" value="" + userInfo._id)
+                    button(type="submit") Видалити
+

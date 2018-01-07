@@ -17,11 +17,13 @@
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
+    "jimp": "^0.2.28",
     "jsonwebtoken": "^8.1.0",
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",
     "koa-convert": "^1.2.0",
     "koa-cookie": "^1.0.0",
+    "koa-locals": "^0.3.0",
     "koa-mongoose": "^2.0.0",
     "koa-morgan": "^1.0.1",
     "koa-pug": "^3.0.0-2",

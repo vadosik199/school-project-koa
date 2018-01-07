@@ -1,0 +1,36 @@
+extends admin-layout
+
+block content
+    div.col-lg-12
+        div.card
+            div.card-header.d-flex.align-items-center
+                h3.h4 Користувачі
+            div.card-body
+                a(href="/adminpanel/users/new").btn.btn-primary Додати нового коритсувача
+                table.table.table-striped.table-hover
+                    thead
+                        tr
+                            th #
+                            th Ім'я
+                            th Прізвище
+                            th Електронна пошта
+                            th Верифіковано
+                            th Блоковано
+                    tbody
+                        each user, index in users
+                            tr
+                                td
+                                    a(href="/users/id/" + user._id)= index + 1
+                                td= user.name
+                                td= user.surname
+                                td= user.email
+                                if user.isVerify
+                                    td +
+                                else
+                                    td
+                                if user.isBlock
+                                    td +
+                                else
+                                    td
+                                
+

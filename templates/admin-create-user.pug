@@ -1,0 +1,25 @@
+extends admin-layout
+
+block content
+    div.col-lg-12
+        div.card
+            div.card-header.d-flex.align-items-center
+                h3.h4 Створення користувача
+            div.card-body
+                form(method="POST" action="/adminpanel/users/new")
+                    div.form-group
+                        label.form-control-label Ім'я
+                        input(type="text" name="name" required).form-control
+                    div.form-group
+                        label.form-control-label Прізвище
+                        input(type="text" name="surname" required).form-control
+                    div.form-group
+                        label.form-control-label Електронна пошта
+                        input(type="text" name="email" required).form-control
+                    div.form-group
+                        label.form-control-label Пpава доступу
+                        select(name="roles" multiple).form-control
+                            each role in roles
+                                option(value ="" + role.value) #{role.title}
+                    div.form-group
+                        input(type="submit" value="Створити").btn.btn-primary

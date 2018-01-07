@@ -33,7 +33,7 @@ const UserSchema = new Schema({
 		type: String,
 		default: '',
 		trim: true,
-		required: true
+		required: false
 	},
 	photo: {
 		type: String,
