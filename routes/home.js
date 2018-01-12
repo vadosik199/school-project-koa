@@ -1,20 +1,18 @@
 const _ = require('koa-router')();
+const Article = require('../models/article');
 const Category = require("../models/category");
 const User = require("../models/user");
 
 _.get('/', async (ctx) => {
-    var cat = {
-        title: "ssaddda"
-    };
-    await Category.create(cat);
-    ctx.body = "home";
-});
-
-_.get('/hello',async (ctx) => {
-    let cats = await Category.find({}).exec();
-    let users = await User.find({}).exec();
-    ctx.render('users.pug', {
-        users: users
+    let articles = await Article.find({})
+		                    .populate("author")
+		                    .populate("category")
+		                    .sort({created: -1})
+		                    .limit(3)
+                            .exec();
+    ctx.render("news", {
+        news: articles,
+        title: "Головна сторінка"
     });
 });
 

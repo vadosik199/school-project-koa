@@ -1,5 +1,9 @@
 /* your styles go here */
 
+section {
+	background-color:  white;
+}
+
 #map {
 	height: 400px;
 	width: 100%;
@@ -11,6 +15,7 @@
 }
 
 .hero section {
+	height:100%;
 	margin:0px;
 	background: rgba(0, 0, 0, 0.4);
 }
@@ -157,10 +162,25 @@ body > header .navbar {
 	width: 100%;
 	text-align: center;
 }
+
+.hero {
+	position: relative;
+	overflow: hidden;
+}
+
+.hero.parallaxer {
+	height:700px;
+}
+
+.hero img {
+	position: absolute;
+}
+
 .img-fluid {
 	object-fit: cover !important;
 	object-position: center !important;
 }
+
 
 /*.post {
 	padding: 10px;

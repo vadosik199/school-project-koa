@@ -2,6 +2,7 @@ const _ = require('koa-router')();
 const Koa = require('koa');
 const Article = require('../models/article');
 const Category = require('../models/category');
+const Comment = require('../models/comment');
 const mv = require('mv');
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
@@ -75,6 +76,7 @@ _.post('/posts/new', async (ctx) => {
             created: Date.now()
         };
         let created = await Article.create(article);
+        ctx.response.redirect('/posts/id/' + created._id);
     }
 });
 
