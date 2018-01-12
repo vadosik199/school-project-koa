@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const {mongoose} = require("koa-mongoose");
 
 const Schema = mongoose.Schema;
 

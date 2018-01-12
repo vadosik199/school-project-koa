@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
+    "formidable": "^1.1.1",
     "jimp": "^0.2.28",
     "jsonwebtoken": "^8.1.0",
     "koa": "^2.4.1",
@@ -31,7 +32,9 @@
     "koa-router": "^7.3.0",
     "koa-send": "^4.1.2",
     "koa-static": "^4.0.2",
+    "koa2-formidable": "^1.0.2",
     "mongoose": "^5.0.0-rc1",
+    "mv": "^2.1.1",
     "nodemailer": "^4.4.1"
   }
 }

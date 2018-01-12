@@ -1,0 +1,14 @@
+extends admin-layout
+
+block content
+    div.col-lg-12
+        div.card
+            div.card-header.d-flex.align-items-center
+                h3.h4 Створення категорії
+            div.card-body
+                form(method="POST" action="/adminpanel/categories/new")
+                    div.form-group
+                        label.form-control-label Назва
+                        input(type="text" name="title" required).form-control
+                    div.form-group
+                        input(type="submit" value="Створити").btn.btn-primary

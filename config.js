@@ -12,5 +12,18 @@ module.exports = {
     nodemailer: {
         user: 'vadosik.chumack@gmail.com',
         pass: 'vadim1976111SZ'
-    }
+    },
+    roles: [
+        {
+            value: 'Admin',
+            title: 'Адміністратор'
+        },
+        {
+            value: 'Teacher',
+            title: 'Вчитель'
+        },
+        {
+            value: 'Student',
+            title: 'Учень'
+        }]
 }

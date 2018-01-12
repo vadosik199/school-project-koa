@@ -1,14 +1,34 @@
-html
-	head
-		script(src="/ckeditor/ckeditor.js")
-	form(method="POST" action="/posts/create" enctype="multipart/form-data")
-		input(type="text" name="title")
-		br
-		textarea(name="text")#news-text
-		br
-		select(name="category")
-			each category in categories
-				option(value= category._id) #{category.title}
-		input(type="file" name="image" multiple)
+extends layout
+block content
+	div.container
+		div.row
+			main.posts-listing.col-lg-8
+				div.container
+					script(src="/ckeditor/ckeditor.js")
+					div.row
+						h2.h3.text-center Створення новини
+						hr
+						form(method="POST" action="/posts/new" enctype="multipart/form-data").col-lg-12
+							div.form-group
+								label.form-control-label Заголовок
+								input(type="text" name="title" required).form-control
+							div.form-group
+								label.form-control-label Категорія
+								select(name="category").form-control
+									each category in categories
+										option(value= category._id) #{category.title}
+							div.form-group
+								label.form-control-label Текст
+								textarea(name="text")#news-text.form-control
+							div.form-group
+								label.form-control-label Обкладинка
+								input(type="file" name="image").form-control
+							div.form-group
+								button(type="submit").btn.btn-primary Зберегти
+			aside.col-lg-4
+				include login-aside.pug
+				include search-aside.pug
+				include latest-posts-aside.pug
+				include categories-aside.pug
 	script
 		include ../public/js/ckeditor-custom.js

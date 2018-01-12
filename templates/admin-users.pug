@@ -16,6 +16,7 @@ block content
                             th Електронна пошта
                             th Верифіковано
                             th Блоковано
+                            th
                     tbody
                         each user, index in users
                             tr
@@ -32,5 +33,6 @@ block content
                                     td +
                                 else
                                     td
-                                
+                                td
+                                    a(href="/adminpanel/users/edit/" + user._id) Редагувати
 

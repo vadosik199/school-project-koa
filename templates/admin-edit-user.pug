@@ -1,0 +1,29 @@
+extends admin-layout
+
+block content
+    div.col-lg-12
+        div.card
+            div.card-header.d-flex.align-items-center
+                h3.h4 user.email
+            div.card-body
+                form(method="POST" action="/adminpanel/users/edit")
+                    input(type="hidden" name="id" value= user._id)
+                    div.form-group
+                        label.form-control-label Ім'я
+                        input(type="text" name="name" required value= user.name).form-control
+                    div.form-group
+                        label.form-control-label Прізвище
+                        input(type="text" name="surname" required value= user.surname).form-control
+                    div.form-group
+                        label.form-control-label Електронна пошта
+                        input(type="text" name="email" required value= user.email).form-control
+                    div.form-group
+                        label.form-control-label Пpава доступу
+                        select(name="roles" multiple).form-control
+                            each role in roles
+                                if !user.roles.includes(role.value)
+                                    option(value ="" + role.value) #{role.title}
+                                else
+                                    option(value ="" + role.value selected) #{role.title}
+                    div.form-group
+                        input(type="submit" value="Створити").btn.btn-primary

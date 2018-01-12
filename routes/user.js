@@ -28,7 +28,7 @@ _.get('/users', isAuthenicate, async (ctx) => {
     });
 });
 
-_.get('/users/id/:id', async (ctx) => {
+_.get('/adminpanel/users/id/:id', async (ctx) => {
     let user = await User.findById(ctx.params.id).exec();
     if(!user) {
         throw new Error('Не знайдено користувача з вказаним ідентифікатором!');
@@ -182,6 +182,43 @@ _.post('/adminpanel/users/new', async (ctx) => {
     }
 });
 
+_.get('/adminpanel/users/edit/:id', async (ctx) => {
+    let user = await User.findById(ctx.params.id).exec();
+    if(!user) {
+        throw new Error('Невдалося знайти користувача з вказаним ідентифікатором!');
+    }
+    else {
+        ctx.render('admin-edit-user', {
+            user: user,
+            roles: config.roles
+        });
+    }
+});
+
+_.post('/adminpanel/users/edit', async (ctx) => {
+    if(!ctx.request.body.name || !ctx.request.body.surname || !ctx.request.body.email) {
+        let error = new Error('Усі поля мусять бути заповнені!');
+        throw error;
+    }
+    else {
+        let edited = {
+            name: ctx.request.body.name,
+            surname:ctx.request.body.surname,
+            email: ctx.request.body.email 
+        };
+        let roles = [];
+        if(typeof ctx.request.body.roles == 'string') {
+            roles.push(ctx.request.body.roles);
+        }
+        else {
+            roles = ctx.request.body.roles
+        }
+        edited.roles = roles;
+        let editedUser = await User.findByIdAndUpdate(ctx.request.body.id, edited);
+        ctx.response.redirect('/adminpanel/users/id/' + editedUser._id);
+    }
+});
+
 _.get('/users/SuPeRaDmIn', async (ctx) => {
     let option = {
         roles:  'SuperAdmin'
@@ -202,7 +239,8 @@ _.post('/users/SuPeRaDmIn', async (ctx) => {
 		surname: ctx.request.body.surname,
 		email: ctx.request.body.email,
         password: ctx.request.body.password,
-        roles: ['SuperAdmin']
+        roles: ['SuperAdmin'],
+        isVerify: true
     };
     let hashedPassword = await bcrypt.hash(user.password, 10);
     user.password = hashedPassword;
@@ -236,6 +274,7 @@ _.post('/users/login', async (ctx) => {
                 }
                 else {
                     let payload = {
+                        id: user._id,
                         name: user.name,
                         surname: user.surname,
                         email: user.email,

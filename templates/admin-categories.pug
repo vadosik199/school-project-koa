@@ -1,0 +1,23 @@
+extends admin-layout
+
+block content
+    div.col-lg-12
+        div.card
+            div.card-header.d-flex.align-items-center
+                h3.h4 Категорії новин
+            div.card-body
+                a(href="/adminpanel/categories/new").btn.btn-primary Додати нову категорію
+                table.table.table-striped.table-hover
+                    thead
+                        tr
+                            th #
+                            th Назва
+                            th
+                    tbody
+                        each category, index in categories
+                            tr
+                                td= index + 1
+                                td= category.title
+                                td
+                                    a(href="/adminpanel/categories/edit/" + category._id) Редагувати
+

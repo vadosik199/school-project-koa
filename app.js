@@ -12,6 +12,9 @@ const bodyParser = require('koa-bodyparser');
 const morgan = require('koa-morgan');
 const _home = require('./routes/home');
 const _user = require('./routes/user');
+const _category = require('./routes/category');
+const _article = require('./routes/article');
+const formidable = require('koa2-formidable');
 
 const accessLogStream = fs.createWriteStream(__dirname + '/access.log',{ flags: 'a' });
 
@@ -32,7 +35,11 @@ app.use(async (ctx, next) => {
 app.use(morgan('combined', { stream: accessLogStream }))
 app.use(morgan('dev'));
 
-app.use(bodyParser());
+//app.use(bodyParser());
+app.use(formidable({
+    multiples: true,
+    maxFieldsSize: 2 * 1024 * 1024 * 1024
+}));
 
 app.use(async (ctx, next) => {
     let regex = new RegExp(/(\.\w+)$/, 'gm');
@@ -82,6 +89,8 @@ pug.use(app);
 
 app.use(_home.routes());
 app.use(_user.routes());
+app.use(_category.routes());
+app.use(_article.routes());
 
 app.listen(3030);
 
