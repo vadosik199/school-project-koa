@@ -7,13 +7,19 @@ const ArticleSchema = new Schema({
 		type: String,
 		default: '',
 		required: true,
-		trim: true,
+		trim: true
 	},
 	text: {
 		type: String,
 		default: '',
 		required: true,
-		trim: true,
+		trim: true
+	},
+	description: {
+		type: String,
+		default: '',
+		required: true,
+		trim: true
 	},
 	images: [String],
 	author: {

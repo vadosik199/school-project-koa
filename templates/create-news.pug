@@ -18,11 +18,14 @@ block content
 									each category in categories
 										option(value= category._id) #{category.title}
 							div.form-group
+								label.form-control-label Короткий опис
+								textarea(name="description" required).form-control
+							div.form-group
 								label.form-control-label Текст
 								textarea(name="text")#news-text.form-control
 							div.form-group
 								label.form-control-label Обкладинка
-								input(type="file" name="image").form-control
+								input(type="file" name="images").form-control
 							div.form-group
 								button(type="submit").btn.btn-primary Зберегти
 			aside.col-lg-4

@@ -2,11 +2,12 @@ extends layout
 block content
 	div.container
 		div.row
-			main.post.blog-post.col-lg-8
+			main.post.blog-post.col-lg-8.post-details
 				div.container
 					div.post-single
 						div.post-thumbnail
-							img(src="/img/news/" + post.images[0]).img-fluid.post-detail-img
+							if post.images.length > 0
+								img(src="/img/news/" + post.images[0]).img-fluid.post-detail-img
 						div.post-details
 							div.post-meta.d-flex.justify-content-between
 								div.category
@@ -27,7 +28,7 @@ block content
 									div.comments.meta-last
 										i.icon-comment
 										.
-											12
+											#{post.comments.length}
 							div.post-body!= post.text
 							div.posts-nav.d-flex.justify-content-between.align-items-stretch.flex-column.flex-md-row
 								if previous != null
@@ -70,7 +71,7 @@ block content
 							div.add-comment
 								header
 									h3.h6 Додати коментар
-								form(action="/comments/add" method="POST").commenting-form
+								form(action="/comments/add" method="POST")#comment-form.commenting-form
 									div.row
 										if !user
 											div.form-group.col-md-6
@@ -83,9 +84,9 @@ block content
 										div.form-group.col-md-12
 											button(type="submit").btn.btn-secondary Відправити коментар
 			aside.col-lg-4
-				include login-aside.pug
 				include search-aside.pug
 				include latest-posts-aside.pug
 				include categories-aside.pug
 	script(src="/js/timeago.js")
 	script timeago().render($('.posted-date'));
+	script(src="/js/comment.js")

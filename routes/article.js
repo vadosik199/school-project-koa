@@ -2,7 +2,7 @@ const _ = require('koa-router')();
 const Koa = require('koa');
 const Article = require('../models/article');
 const Category = require('../models/category');
-const Comment = require('../models/comment');
+const {Comment} = require('../models/comment');
 const mv = require('mv');
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
@@ -55,14 +55,14 @@ _.get('/posts/new', async (ctx) => {
 
 _.post('/posts/new', async (ctx) => {
     let {body, files} = ctx.request;
-    if(!body.title || !body.text || !body.category) {
+    if(!body.title || !body.text || !body.category || !body.description) {
         throw new Error('Усі поля мусять бути заповнені!');
     }
     else {
         let images = [];
-        if(files.image) {
-            let oldpath = files.image.path;
-            let newFileName = Date.now() +files.image.name;
+        if(files.images && files.images.size > 0) {
+            let oldpath = files.images.path;
+            let newFileName = Date.now() +files.images.name;
             let newpath = appDir + '/public/img/news/' + newFileName;
             await saveFile(oldpath, newpath);
             images.push(newFileName);
@@ -70,6 +70,7 @@ _.post('/posts/new', async (ctx) => {
         let article = {
             title: body.title,
             text: body.text,
+            description: body.description,
             images: images,
             category: body.category,
             author: ctx.request.user.id,
@@ -112,6 +113,33 @@ _.get('/posts/id/:id', async (ctx) => {
         latestPosts: latestPosts,
         categories: categories,
     });
+});
+
+_.post('/posts/comments/add', async (ctx) => {
+    try {
+        let {body} = ctx.request;
+        let article = await Article.findById(body.postId).exec();
+        let comment = {
+            text: body.text,
+            date: Date.now(),
+            post: article._id
+        };
+        if(ctx.request.user) {
+            comment.author = ctx.request.user.id
+        }
+        else {
+            comment.authorName = body.username;
+            comment.authorEmail = body.email;
+        }
+        let created = await Comment.create(comment);
+        await Article.findByIdAndUpdate(article._id, {$push: {comments: created._id}});
+        ctx.status = 200;
+        ctx.body = 'Коментар збережено для перегляду!';
+    }
+    catch(err) {
+        ctx.status = 500;
+        ctx.body = 'Не вдалося додати коментар. Спробуйте пізніше!';
+    }
 });
 
 function saveFile(oldPath, newPath) {

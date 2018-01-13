@@ -7,9 +7,10 @@ block content
 					div.row
 						each post in posts
 							div.post.col-xl-12
-								div.post-thumbnail
-									a(href="/posts/id/" + post._id)
-										img(src="/img/news/" + post.images[0]).img-fluid
+								if post.images.length > 0
+									div.post-thumbnail
+										a(href="/posts/id/" + post._id)
+											img(src="/img/news/" + post.images[0]).img-fluid
 								div.post-details
 									div.post-meta.d-flex.justify-content-between
 										div.date.meta-last
@@ -17,6 +18,7 @@ block content
 											a(href="/posts?category=" + post.category._id) #{post.category.title}
 									a(title= post.title href="/posts/id/" + post._id)
 										h3.h4 #{post.title}
+									p= post.description
 									footer.post-footer.d-flex.align-items-center
 										a(href="#").author.d-flex.align-items-center.flex-wrap
 											div.avatar
@@ -34,7 +36,6 @@ block content
 											.
 												#{post.comments.length}
 			aside.col-lg-4
-				include login-aside.pug
 				include search-aside.pug
 				include latest-posts-aside.pug
 				include categories-aside.pug
