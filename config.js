@@ -18,7 +18,7 @@ module.exports = {
         permissions: "delete",
         user_id: "142336453@N03"
     },
-    flickrUrl: "http://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg",
+    flickrUrl: "http://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_b.jpg",
     nodemailer: {
         user: 'vadosik.chumack@gmail.com',
         pass: 'vadim1976111SZ'

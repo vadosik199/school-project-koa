@@ -5,8 +5,8 @@ const Category = require('../models/category');
 const config = require('../config');
 const {Comment} = require('../models/comment');
 const mv = require('mv');
+const uploadImg = require('../flickr-save');
 var path = require('path');
-const Flicker = require('flickrapi');
 var appDir = path.dirname(require.main.filename);
 
 _.get('/posts', async (ctx) => {
@@ -86,9 +86,16 @@ _.post('/posts/new', async (ctx) => {
 _.post('/posts/saveImage', async (ctx) => {
     let {body, files} = ctx.request;
     let oldpath = files.file.path;
-    let newFileName = Date.now() +files.file.name;
-    let newpath = appDir + '/public/img/news/' + newFileName;
-    let result = await saveFile(oldpath, newpath);
+    //let newFileName = Date.now() +files.file.name;
+    //let newpath = appDir + '/public/img/news/' + newFileName;
+    //await saveFile(oldpath, newpath);
+    //let result = await saveFile(oldpath, newpath);
+    let result = await uploadImg({
+        photos: [{
+            title: 'school',
+            photo: oldpath
+        }]
+    });
     ctx.body = result;
 });
 
@@ -151,46 +158,7 @@ function saveFile(oldPath, newPath) {
                 reject(err);
             }
             else {
-                Flicker.authenticate(config.flickrOption, (err, flickr) => {
-                    if(err) {
-                        reject(err);
-                    }
-                    else {
-                        var uploadOptions = {
-                            photos: [{
-                                title: "test",
-                                tags: [
-                                    "happy fox",
-                                    "test 1"
-                                ],
-                              photo: newPath
-                            }]
-                        };
-                        Flicker.upload(uploadOptions, config.flickrOption, (err, photoId) => {
-                            if(err) {
-                                reject(err);
-                            }
-                            else {
-                                flickr.photos.getInfo({
-                                    secret: config.flickrOption.access_token_secret,
-                                    photo_id: photoId[0]
-                                }, (err, result) => {
-                                    if(err) {
-                                        reject(err);
-                                    }
-                                    else {
-                                        console.log(result);
-                                        let url = config.flickrUrl.replace('{farm-id}', result.photo.farm);
-                                        url = url.replace('{server-id}', result.photo.server);
-                                        url = url.replace('{id}', result.photo.id);
-                                        url = url.replace('{secret}', result.photo.secret);
-                                        resolve(url);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                resolve(true);
             }
         });
     });
