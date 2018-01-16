@@ -2,9 +2,11 @@ const _ = require('koa-router')();
 const Koa = require('koa');
 const Article = require('../models/article');
 const Category = require('../models/category');
+const config = require('../config');
 const {Comment} = require('../models/comment');
 const mv = require('mv');
 var path = require('path');
+const Flicker = require('flickrapi');
 var appDir = path.dirname(require.main.filename);
 
 _.get('/posts', async (ctx) => {
@@ -86,8 +88,8 @@ _.post('/posts/saveImage', async (ctx) => {
     let oldpath = files.file.path;
     let newFileName = Date.now() +files.file.name;
     let newpath = appDir + '/public/img/news/' + newFileName;
-    await saveFile(oldpath, newpath);
-    ctx.body = newFileName;
+    let result = await saveFile(oldpath, newpath);
+    ctx.body = result;
 });
 
 _.get('/posts/id/:id', async (ctx) => {
@@ -149,7 +151,46 @@ function saveFile(oldPath, newPath) {
                 reject(err);
             }
             else {
-                resolve(true);
+                Flicker.authenticate(config.flickrOption, (err, flickr) => {
+                    if(err) {
+                        reject(err);
+                    }
+                    else {
+                        var uploadOptions = {
+                            photos: [{
+                                title: "test",
+                                tags: [
+                                    "happy fox",
+                                    "test 1"
+                                ],
+                              photo: newPath
+                            }]
+                        };
+                        Flicker.upload(uploadOptions, config.flickrOption, (err, photoId) => {
+                            if(err) {
+                                reject(err);
+                            }
+                            else {
+                                flickr.photos.getInfo({
+                                    secret: config.flickrOption.access_token_secret,
+                                    photo_id: photoId[0]
+                                }, (err, result) => {
+                                    if(err) {
+                                        reject(err);
+                                    }
+                                    else {
+                                        console.log(result);
+                                        let url = config.flickrUrl.replace('{farm-id}', result.photo.farm);
+                                        url = url.replace('{server-id}', result.photo.server);
+                                        url = url.replace('{id}', result.photo.id);
+                                        url = url.replace('{secret}', result.photo.secret);
+                                        resolve(url);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
         });
     });

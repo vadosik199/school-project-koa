@@ -23,7 +23,7 @@ function sendFile(file, el) {
 		enctype: 'multipart/form-data',
 		processData: false,
 		success: function(url) {
-			$(el).summernote('editor.insertImage', '/img/news/' + url);
+			$(el).summernote('editor.insertImage', url);
 		}
 	});
 }

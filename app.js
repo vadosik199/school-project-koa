@@ -43,7 +43,8 @@ app.use(formidable({
 
 app.use(async (ctx, next) => {
     let regex = new RegExp(/(\.\w+)$/, 'gm');
-    if(regex.test(ctx.path)) {
+    let invalid = new RegExp(/^((http|https):\/\/.+\.\w+)$/, 'gm');
+    if(!invalid.test(ctx.path) && regex.test(ctx.path)) {
         await send(ctx, ctx.path, { root: __dirname + '/public' });
     }
     else {
@@ -52,10 +53,10 @@ app.use(async (ctx, next) => {
 });
 
 app.use(convert(mongoose({
-    user: config.database.user,
-    pass: config.database.pass,
-    host: config.database.host,
-    port: config.database.port,
+    user: '',
+    pass: '',
+    host: 'localhost',
+    port: 27017,
     database: config.database.database,
     mongodbOptions:{
         useMongoClient: true,
