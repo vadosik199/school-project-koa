@@ -1,0 +1,20 @@
+extends layout
+block content
+    section.hero.parallaxer
+        img(src="" + album.primary)
+        section.hero
+            div.container
+                div.row
+                    div.col-lg-12
+                        h1.text-center= album.title
+                        p.text-center= album.photos.length + " фото"
+    div(style="margin-top: 0px !important").container.gallery-container
+        div.tz-gallery
+            div.row.masonry-row
+                each photo in album.photos
+                        div.col-sm-12.col-md-4.masonry-item
+                            a(href="" + photo).light-box.lightbox
+                                img(src="" + photo).img-fluid
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js")
+    script baguetteBox.run('.tz-gallery');
+    script(src="/js/parallax.js")

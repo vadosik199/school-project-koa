@@ -14,6 +14,7 @@ const _home = require('./routes/home');
 const _user = require('./routes/user');
 const _category = require('./routes/category');
 const _article = require('./routes/article');
+const _gallery = require('./routes/gallery');
 const formidable = require('koa2-formidable');
 
 const accessLogStream = fs.createWriteStream(__dirname + '/access.log',{ flags: 'a' });
@@ -92,6 +93,7 @@ app.use(_home.routes());
 app.use(_user.routes());
 app.use(_category.routes());
 app.use(_article.routes());
+app.use(_gallery.routes());
 
 app.listen(3030);
 

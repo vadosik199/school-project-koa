@@ -64,10 +64,13 @@ _.post('/posts/new', async (ctx) => {
         let images = [];
         if(files.images && files.images.size > 0) {
             let oldpath = files.images.path;
-            let newFileName = Date.now() +files.images.name;
-            let newpath = appDir + '/public/img/news/' + newFileName;
-            await saveFile(oldpath, newpath);
-            images.push(newFileName);
+            let result = await uploadImg.upload({
+                photos: [{
+                    title: 'school',
+                    photo: oldpath
+                }]
+            });
+            images.push(result);
         }
         let article = {
             title: body.title,
@@ -86,11 +89,7 @@ _.post('/posts/new', async (ctx) => {
 _.post('/posts/saveImage', async (ctx) => {
     let {body, files} = ctx.request;
     let oldpath = files.file.path;
-    //let newFileName = Date.now() +files.file.name;
-    //let newpath = appDir + '/public/img/news/' + newFileName;
-    //await saveFile(oldpath, newpath);
-    //let result = await saveFile(oldpath, newpath);
-    let result = await uploadImg({
+    let result = await uploadImg.upload({
         photos: [{
             title: 'school',
             photo: oldpath

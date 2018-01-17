@@ -16,9 +16,13 @@ html
 		link(rel="stylesheet" href="/css/custom.css")
 		link(href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet")
 		link(rel="stylesheet" href="/css/parallaxer.css")
+		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css")
+		if css
+			link(href="" + css rel="stylesheet")
 		script(src="/jquery/jquery.js")
 		script(src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js")
 		script(src="/js/prllx.js")
+		script(src="/js/masonry.js")
 	body
 		header.header
 			nav.navbar.navbar-expand-lg.sticky-top
@@ -48,7 +52,7 @@ html
 							li.nav-item
 								a(href="/posts").nav-link Новини
 							li.nav-item
-								a(href="#").nav-link Post
+								a(href="/gallery").nav-link Галерея
 							li.nav-item
 								a(href="#").nav-link Contact
 						div.navbar-text
@@ -63,4 +67,5 @@ html
 		script(src="/fancybox/jquery.fancybox.min.js")
 		script(src="/js/front.js")
 		script(src="/js/map.js")
+		script(src="/js/masonry-initaliser.js")
 		script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpnRZvPH5z-eSnSJah9xMW0c53MDQdoj0&callback=initMap" async defer)

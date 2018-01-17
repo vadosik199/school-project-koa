@@ -1,0 +1,16 @@
+extends layout
+block content
+    div.container.gallery-container
+        h1 ШКІЛЬНА ГАЛЕРЕЯ
+        div.tz-gallery
+            div.row.masonry-row
+                each album in albums
+                        div.col-sm-12.col-md-4.masonry-item
+                            div.thumbnail
+                                a(href="/gallery/albums/id/" + album.id).light-box
+                                    img(src="" + album.primary).img-fluid
+                                div.caption
+                                    h3= album.title
+                                    p= album.description
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js")
+    script baguetteBox.run('.tz-gallery');
