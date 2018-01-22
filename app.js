@@ -54,10 +54,10 @@ app.use(async (ctx, next) => {
 });
 
 app.use(convert(mongoose({
-    user: '',
-    pass: '',
-    host: 'localhost',
-    port: 27017,
+    user: config.database.user,
+    pass: config.database.pass,
+    host: config.database.host,
+    port: config.database.port,
     database: config.database.database,
     mongodbOptions:{
         useMongoClient: true,

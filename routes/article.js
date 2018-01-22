@@ -150,6 +150,71 @@ _.post('/posts/comments/add', async (ctx) => {
     }
 });
 
+_.get('/posts/edit/:id', async (ctx) => {
+    let id = ctx.params.id;
+    let article = await Article.findById(id).populate('category').exec();
+    if(!article) {
+        throw new Error("Не вдалося знайти новину!");
+    }
+    let categories = await Category.find({}).exec();
+    let latestPosts = await Article.find({})
+                                .sort({created: -1})
+                                .limit(3)
+                                .exec();
+    console.log(categories);
+    ctx.body =  {
+        title: 'Редагувати новину',
+        article: article,
+        latestPosts: latestPosts,
+        categories: categories
+    };
+    ctx.render("edit-article", ctx.body);
+});
+
+_.post('/posts/edit', async (ctx) => {
+    let {body, files} = ctx.request;
+    let article = await Article.findById(body.id).exec();
+    if(!article) {
+        throw new Error("Не вдалося знайти новину!");
+    }
+    let edited = {
+        title: body.title,
+        text: body.text,
+        description: body.description,
+        category: body.category
+    };
+    let images = [];
+    if (body.isImageDeleted == "true" && files.images && files.images.size == 0 && article.images.length > 0) {
+        edited.images = [];
+    }
+    else if (body.isImageDeleted == "false" && files.images && files.images.size == 0) {
+    }
+    else if (body.isImageDeleted == "true" && files.images && files.images.size > 0) {
+        let oldpath = files.images.path;
+        let result = await uploadImg.upload({
+            photos: [{
+                title: 'school',
+                photo: oldpath
+            }]
+        });
+        images.push(result);
+        edited.images = images;
+    }
+    else if (body.isImageDeleted == "false" && files.images && files.images.size > 0) {
+        let oldpath = files.images.path;
+        let result = await uploadImg.upload({
+            photos: [{
+                title: 'school',
+                photo: oldpath
+            }]
+        });
+        images.push(result);
+        edited.images = images;
+    }
+    await Article.findByIdAndUpdate(body.id, edited);
+    ctx.response.redirect('/posts/id/' + body.id);
+});
+
 function saveFile(oldPath, newPath) {
     return new Promise((resolve, reject) => {
         mv(oldPath, newPath, (err) => {

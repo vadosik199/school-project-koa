@@ -1,0 +1,46 @@
+extends layout
+block content
+	div.container
+		div.row
+			main.posts-listing.col-lg-8
+				div.container
+					script(src="/ckeditor/ckeditor.js")
+					div.row
+						h2.h3.text-center Редагування новини
+						hr
+						form(method="POST" action="/posts/edit" enctype="multipart/form-data").col-lg-12
+							input(type="hidden" name="id" value= article._id)
+							div.form-group
+								label.form-control-label Заголовок
+								input(type="text" name="title" required value= article.title).form-control
+							div.form-group
+								label.form-control-label Категорія
+								select(name="category").form-control
+									each category in categories
+										if article.category.title==category.title
+											option(value= category._id selected) #{category.title}
+										else
+											option(value= category._id) #{category.title}
+							div.form-group
+								label.form-control-label Короткий опис
+								textarea(name="description" required).form-control #{article.description}
+							div.form-group
+								label.form-control-label Текст
+								textarea(name="text")#news-text.form-control #{article.text}
+							div.form-group
+								label.form-control-label Обкладинка
+								input(type="hidden" name="isImageDeleted" value="false")#delete-input
+								if article.images.length > 0
+									img(src= article.images[0]).img-fluid.img-thumbnail
+									button(type="script")#delete-img.btn.btn-danger.delete-img Видалити обкладинку
+								input(type="file" name="images" value="Обрати нову").form-control
+							div.form-group
+								button(type="submit").btn.btn-primary Зберегти
+			aside.col-lg-4
+				include search-aside.pug
+				include latest-posts-aside.pug
+				include categories-aside.pug
+	script
+		include ../public/js/ckeditor-custom.js
+	script
+		include ../public/js/edit-article.js

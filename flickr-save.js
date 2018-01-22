@@ -65,6 +65,39 @@ module.exports.getAlbumsList = () => {
     });
 }
 
+module.exports.getPhotosFormHome = () => {
+    return new Promise((resolve, reject) => {
+        Flicker.authenticate(config.flickrOption, (err, flickr) => {
+            if(err) reject(err);
+            let option = {
+                api_key: config.flickrOption.api_key,
+                user_id: config.flickrOption.user_id,
+                per_page: 4,
+                extras: 'original_format'
+            };
+            flickr.photos.search(option, (err, photos) => {
+                if(err) reject(err);
+                let arr = [];
+                let counter = 0;
+                for(let i = 0; i < photos.photos.photo.length; i++) {
+                    let searchOption = {
+                        secret: config.flickrOption.access_token_secret,
+                        photo_id: photos.photos.photo[i].id
+                    };
+                    flickr.photos.getSizes(searchOption, (err, photo) => {
+                        if(err) reject(err);
+                        arr.push(photo.sizes.size[photo.sizes.size.length - 1].source);
+                        counter++;
+                        if(counter == photos.photos.photo.length) {
+                            resolve(arr);
+                        }
+                    });
+                }
+            });
+        }); 
+    });
+}
+
 module.exports.getPhotos = (albumId) => {
     return new Promise((resolve, reject) => {
         let searchOption = {

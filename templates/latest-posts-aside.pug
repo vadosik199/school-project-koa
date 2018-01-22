@@ -6,7 +6,10 @@ div.widget.latest-posts
 			a(title= post.title href="/posts/id/" + post._id)
 				div.item.d-flex.align-items-center
 					div.image
-						img(src="/img/news/" + post.images[0]).img-fluid
+						if post.images.length > 0
+							img(src="" + post.images[0]).img-fluid
+						else
+							img(src="/img/news.png").img-fluid
 					div.title
 						strong= post.title
 						div.d-flex.align-items-center

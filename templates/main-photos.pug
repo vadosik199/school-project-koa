@@ -1,0 +1,9 @@
+section.gallery.no-padding
+    div.row
+        each photo in photos
+            div.mix.col-lg-3.col-md-3.col-sm-6
+                div.item
+                    a(href="" + photo data-fancybox="gallery").image
+                        img(src="" + photo).img-fluid-s
+                        div.overlay.d-flex.align-items-center.justify-content-center
+                            i.icon-search

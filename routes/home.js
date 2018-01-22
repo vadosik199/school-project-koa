@@ -2,6 +2,7 @@ const _ = require('koa-router')();
 const Article = require('../models/article');
 const Category = require("../models/category");
 const User = require("../models/user");
+const flickr = require('../flickr-save');
 
 _.get('/', async (ctx) => {
     let articles = await Article.find({})
@@ -12,7 +13,8 @@ _.get('/', async (ctx) => {
                             .exec();
     ctx.render("news", {
         news: articles,
-        title: "Головна сторінка"
+        title: "Головна сторінка",
+        photos: []
     });
 });
 
