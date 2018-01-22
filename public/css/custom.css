@@ -235,3 +235,8 @@ body > header .navbar {
 .post-details .edit-btn:hover {
 	color: red;
 }
+
+
+.dropzone {
+	width: 100% !important;
+}

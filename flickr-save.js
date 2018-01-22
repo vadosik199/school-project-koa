@@ -15,7 +15,10 @@ module.exports.upload = (uploadOptions) => {
                         reject(err);
                     }
                     else {
-                        resolve(result.sizes.size[result.sizes.size.length - 1].source);
+                        resolve({
+                            id: photoId[0],
+                            src: result.sizes.size[result.sizes.size.length - 1].source
+                        });
                     }
                 });
             });
@@ -95,6 +98,22 @@ module.exports.getPhotosFormHome = () => {
                 }
             });
         }); 
+    });
+}
+
+module.exports.addToAlbum = async (photoId, albumId) => {
+    return new Promise((resolve, reject) => {
+        Flicker.authenticate(config.flickrOption, (err, flickr) => {
+            if(err) reject(err);
+            flickr.photosets.addPhoto({
+                api_key: config.flickrOption.api_key,
+                photo_id: photoId,
+                photoset_id: albumId
+            }, (err, result) => {
+                if(err) reject(err);
+                resolve(result);
+            });
+        });
     });
 }
 

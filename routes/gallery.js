@@ -18,4 +18,18 @@ _.get('/gallery/albums/id/:id', async (ctx) => {
     });
 });
 
+_.post('/uploadimg', async (ctx) => {
+    let {body, files} = ctx.request;
+    let oldpath = files.file.path;
+    let {id} = await flickr.upload({
+        photos: [{
+            title: 'school',
+            photo: oldpath
+        }]
+    });
+    let albumId = ctx.header.referer.split('/').pop();
+    let result = await flickr.addToAlbum(id, albumId);
+    ctx.body = files;
+});
+
 module.exports = _;

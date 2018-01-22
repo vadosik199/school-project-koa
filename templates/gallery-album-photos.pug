@@ -15,7 +15,7 @@ block content
                         div.col-sm-12.col-md-4.masonry-item
                             a(href="" + photo).light-box.lightbox
                                 img(src="" + photo).img-fluid
-        form(action="/file-upload").dropzone
+        form(action="/uploadimg" multiple).dropzone
             div.fallback
                 input(name="file" type="file" multiple)   
     script(src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js")
