@@ -51,9 +51,14 @@ section {
 
 .post-thumbnail img {
 	width: 100%;
-	height: 40%;
+	height: auto !important;
 	object-position: center;
 	object-fit: cover;
+}
+
+.post-thumbnail a {
+	display: inline-block;
+	width: 100%;
 }
 
 .text-muted {
@@ -185,6 +190,8 @@ body > header .navbar {
 }
 
 .img-fluid {
+	width: 100% !important;
+	height: auto;
 	object-fit: cover !important;
 	object-position: center !important;
 }
@@ -219,4 +226,12 @@ body > header .navbar {
 .delete-img {
 	position: relative;
 	top:-40px;
+}
+
+.post-details .edit-btn {
+	color: rgb(102, 102, 102);
+}
+
+.post-details .edit-btn:hover {
+	color: red;
 }

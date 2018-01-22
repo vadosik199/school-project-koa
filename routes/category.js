@@ -51,4 +51,25 @@ _.post('/adminpanel/categories/edit', async (ctx) => {
     }
 });
 
+_.get('/adminpanel/categories/delete/:id', async (ctx) => {
+    let category = await Category.findById({_id: ctx.params.id});
+    if(!category) {
+        throw new Error('Не вдалося знайти категорію з вказаним ідентифікаторм!');
+    }
+    else {
+        ctx.render('admin-delete-category', {
+            category: category
+        });
+    }
+});
+
+_.post('/adminpanel/categories/delete', async (ctx) => {
+    let category = await Category.findById(ctx.request.body.id);
+    if(!category) {
+        throw new Error('Не вдалося видалити категорію. Не вірно вказаний ідентифікатор!');
+    }
+    await category.remove();
+    ctx.response.redirect('/adminpanel/categories');
+});
+
 module.exports = _;

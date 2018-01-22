@@ -50,8 +50,15 @@ html
 						ul.navbar-nav.ml-auto
 							li.nav-item
 								a(href="/").nav-link Головна
-							li.nav-item
-								a(href="/posts").nav-link Новини
+							if user && (user.roles.includes('SuperAdmin') || user.roles.includes('Admin'))
+								li.nav-item.dropdown
+									a(href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")#navbarDropdownMenuLink.nav-link.dropdown-toggle Новини
+									div(aria-labelledby="navbarDropdownMenuLink").dropdown-menu
+										a(href="/posts").dropdown-item Переглянути
+										a(href="/posts/new").dropdown-item Додати
+							else
+								li.nav-item
+									a(href="/posts").nav-link Новини
 							li.nav-item
 								a(href="/gallery").nav-link Галерея
 							li.nav-item

@@ -215,6 +215,17 @@ _.post('/posts/edit', async (ctx) => {
     ctx.response.redirect('/posts/id/' + body.id);
 });
 
+_.post('/posts/delete', async (ctx) => {
+    let article = await Article.findById(ctx.request.body.id);
+    if(!article) {
+        ctx.body = false
+    }
+    else {
+        await article.remove();
+        ctx.body = true;
+    }
+});
+
 function saveFile(oldPath, newPath) {
     return new Promise((resolve, reject) => {
         mv(oldPath, newPath, (err) => {

@@ -1,0 +1,15 @@
+extends admin-layout
+
+block content
+    div.col-lg-12
+        div.card
+            div.card-header.d-flex.align-items-center
+                h3.h4 Видалення категорії
+            div.card-body
+                form(method="POST" action="/adminpanel/categories/delete")
+                    input(type="hidden" name="id" value= category._id)
+                    div.form-group
+                        label.form-control-label Назва
+                        input(type="text" name="title" required value= category.title disabled).form-control
+                    div.form-group
+                        input(type="submit" value="Видалити").btn.btn-primary
